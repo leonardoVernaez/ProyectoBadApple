@@ -18,6 +18,10 @@ class asciiConverter():
         Returns:
             [np.array]: [array con valores binarios respecto al color]
         """
+        #mensaje de error para el caso de que no se introduzca un array de numpy
+        if type(imagen) != type(np.array([])):
+            raise Exception('Esto no es un array de numpy')
+        
         img = imagen.copy()
         #obtiene el tamaño original de la imagen para emplearlo más tarde
         shaped= img.shape
@@ -71,7 +75,6 @@ if __name__ == '__main__':
     img = cv.imread('test/guaro.png')
 
     c= (a.binarizarImagen(img))
-    
     cv.imshow('c',c*255)
     cv.imshow('img',img)
     cv.waitKey(0)
