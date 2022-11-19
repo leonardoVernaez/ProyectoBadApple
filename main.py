@@ -18,11 +18,12 @@ class asciiConverter():
         Returns:
             [np.array]: [array con valores binarios respecto al color]
         """
+        img = imagen.copy()
         #obtiene el tamaño original de la imagen para emplearlo más tarde
-        shaped= imagen.shape
+        shaped= img.shape
         
         #crea una lista bidimensional con la información de cada pixel
-        imageReshaped = imagen.reshape(1,shaped[0]*shaped[1],3)
+        imageReshaped = img.reshape(1,shaped[0]*shaped[1],3)
         
         #crea un dataframe con la información de cada pixel en una lista con los valores de cada pixel ordenados
         df = pd.DataFrame(imageReshaped[0])
@@ -38,9 +39,12 @@ class asciiConverter():
         
         return imagenFinal
         
-    def ImageToAscii(self,ruta,dimensiones=(20,20),color=True):
-        pass
+    def ImageToAscii(self,imagen,dimensiones=(20,20),color=True):
         
+        
+        
+        
+        return imagen
         
         
         
@@ -65,8 +69,9 @@ if __name__ == '__main__':
     a =asciiConverter()
     
     img = cv.imread('test/guaro.png')
-    
+
     c= (a.binarizarImagen(img))
     
-    cv.imshow('hia',c*255)
+    cv.imshow('c',c*255)
+    cv.imshow('img',img)
     cv.waitKey(0)
