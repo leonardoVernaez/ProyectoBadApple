@@ -43,12 +43,32 @@ class asciiConverter():
         
         return imagenFinal
         
-    def ImageToAscii(self,imagen,dimensiones=(20,20),color=True):
+    def ImageToAscii(self,imagen,ancho=50,color=True):
+        """ImageToAscii convierte la imagen en condigo ascii
+
+        Args:
+            imagen ([numpy.array]): [array que contiene la información de la imagen]
+            ancho (int, optional): [ancho que va a tener la imagen en código ascii]. Defaults to 50.
+            color (bool, optional): [True para que se imprima con colores ascii, False para que sea solo en escala de grises]. Defaults to True.
+
+        Returns:
+            [str]: [string con la imagen en ascii art]
+        """
+        #copia la imagen para no alterar los valores de entrada
+        img = imagen.copy()
+
+        #guarda las dimensiones de la imagen para calcular otro tamaño proporcional a partir de un ancho y un alto        
+        shape = img.shape
+        #calcula las nuevas proporciones de la imagen : (largo_original*((ancho*100)/ancho_original))/100
+        nuevo_ancho = ancho
+        porcentaje = (ancho*100)/shape[1]
+        nuevo_alto = int((shape[0]*porcentaje)/100)
         
+        #realiza el reescalado de la imagen con las proporciones calculadas
+        img_resized = cv.resize(img,(nuevo_ancho,nuevo_alto))
+
         
-        
-        
-        return imagen
+        return img_resized
         
         
         
@@ -68,13 +88,3 @@ class asciiConverter():
         
     
 
-if __name__ == '__main__':
-    
-    a =asciiConverter()
-    
-    img = cv.imread('test/guaro.png')
-
-    c= (a.binarizarImagen(img))
-    cv.imshow('c',c*255)
-    cv.imshow('img',img)
-    cv.waitKey(0)
