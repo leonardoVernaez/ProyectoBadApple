@@ -43,7 +43,7 @@ class asciiConverter():
         
         return imagenFinal
         
-    def ImageToAscii(self,imagen,ancho=50,color=True):
+    def ImageToAscii(self,imagen,ancho=50,caracteres = ' .:(!%#@Ñ',color=True):
         """ImageToAscii convierte la imagen en condigo ascii
 
         Args:
@@ -67,8 +67,24 @@ class asciiConverter():
         #realiza el reescalado de la imagen con las proporciones calculadas
         img_resized = cv.resize(img,(nuevo_ancho,nuevo_alto))
 
+        #realiza la conversion a escala de grises de la imagen
+        img_grayScale= cv.cvtColor(img_resized, cv.COLOR_BGR2GRAY) 
+
         
-        return img_resized
+
+        chars = (np.round((img_grayScale/(255/9))-1))
+      
+        
+        result = ''
+          
+        for fila in chars:
+            
+            for columna in range(len(fila)):
+                result = result + caracteres[int(fila[columna])-1]
+            result += '\n'
+        print(result)
+        
+        return result
         
         
         
