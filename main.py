@@ -82,7 +82,7 @@ class asciiConverter():
             for columna in range(len(fila)):
                 result = result + caracteres[int(fila[columna])-1]
             result += '\n'
-        print(result)
+       
         
         return result
         
