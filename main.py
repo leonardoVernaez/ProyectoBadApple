@@ -7,7 +7,16 @@ class asciiConverter():
     
     def __init__(self):
         
-        pass
+        #lista que contiene los valores de los colores en ascii ordenada para tener un fácil acceso
+        self.colors = [[['\033[0;30m','\033[0;34m'],['\033[0;32m','\033[0;36m']],
+                       [['\033[0;31m','\033[0;35m'],['\033[0;33m','\033[0;37m']]]
+        #Pone por defecto la tipografía que se desea utilizar
+        self.reset = '\033[0;39m'
+        
+        
+    
+    
+    
     def binarizarImagen(self,imagen):
         """
         Convierte un array de entrada, que contiene los valores RGB de la imagen en binario
@@ -43,6 +52,35 @@ class asciiConverter():
         
         return imagenFinal
         
+    def PhotoToColor(self,imagen):
+        """PhotToColor transforma la imagen con valores RGB binarios en los caracteres ascii que determinaran el color de la imagen final
+
+        Args:
+            imagen ([numpy.array]): [un array de numpy que contiene la imagen, nota: asegurarse que primero la imagen haya pasado primero por binarizarImagen]
+
+        Returns:
+            [list]: [lista con los caracteres de determinaran el color]
+        """
+        img = imagen.copy()
+        img = cv.cvtColor(img,cv.COLOR_BGR2RGB)
+        result = []
+        
+        for fila in range(img.shape[1]):
+            
+            preResult = []
+            
+            for columna in range((img.shape[0])):
+                
+                colorRGB = img[fila][columna]
+                preResult.append(self.colors[colorRGB[0]][colorRGB[1]][colorRGB[2]])
+                
+            result.append(preResult)
+        
+        return result
+        
+        
+    
+    
     def ImageToAscii(self,imagen,ancho=50,caracteres = ' .:(!%#@Ñ',color=True):
         """ImageToAscii convierte la imagen en condigo ascii
 
