@@ -61,19 +61,27 @@ class asciiConverter():
         Returns:
             [list]: [lista con los caracteres de determinaran el color]
         """
+        
+        #copia la imagen para evitar editar la imagen original
         img = imagen.copy()
+        #pasa la imagen de BGR a RGB
         img = cv.cvtColor(img,cv.COLOR_BGR2RGB)
+        #esta lista contendrá la salida de la función 
         result = []
         
+        #bucles anidados que van a recorrer la imagen
+        
         for fila in range(img.shape[1]):
-            
+            #lista de los resultados de cada columna
             preResult = []
             
             for columna in range((img.shape[0])):
-                
+                #saca los valores RGB de la imagen
                 colorRGB = img[fila][columna]
-                preResult.append(self.colors[colorRGB[0]][colorRGB[1]][colorRGB[2]])
                 
+                #añade el color de cada pixel a su correspondiente columna
+                preResult.append(self.colors[colorRGB[0]][colorRGB[1]][colorRGB[2]])
+            #añade la fila a la lista
             result.append(preResult)
         
         return result
@@ -93,7 +101,7 @@ class asciiConverter():
             [str]: [string con la imagen en ascii art]
         """
         #copia la imagen para no alterar los valores de entrada
-        img = imagen.copy()
+        img = imagen
 
         #guarda las dimensiones de la imagen para calcular otro tamaño proporcional a partir de un ancho y un alto        
         shape = img.shape
@@ -107,18 +115,27 @@ class asciiConverter():
 
         #realiza la conversion a escala de grises de la imagen
         img_grayScale= cv.cvtColor(img_resized, cv.COLOR_BGR2GRAY) 
-
-        
-
-        chars = (np.round((img_grayScale/(255/9))-1))
-      
-        
-        result = ''
-          
-        for fila in chars:
+        #en caso de que se desee generar una imagen con color se genera la lista de colores para cada pixel
+        if color:
             
-            for columna in range(len(fila)):
-                result = result + caracteres[int(fila[columna])-1]
+            colores =self.PhotoToColor(self.binarizarImagen(img_resized))
+        
+        #array de números que contiene la 
+        chars = (np.round((img_grayScale/(255/len(caracteres)))-1))
+      
+        #string que contendrá el resultado
+        result = ''
+        
+        #bucle concatenado que lee y crea el string final
+        for fila in range(chars.shape[1]):
+            
+            for columna in range(chars.shape[0]):
+                #le añade color en caso de que se desee
+                if color:
+                    result = result + colores[fila][columna]
+                    
+                #esto añade el carácter correspondiente a cada píxel   
+                result = result + caracteres[int(chars[fila][columna])-1] + self.reset
             result += '\n'
        
         
