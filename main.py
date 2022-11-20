@@ -27,11 +27,22 @@ class asciiConverter():
         Returns:
             [np.array]: [array con valores binarios respecto al color]
         """
+        
+        
+        
+        
+        
+        
+        
         #mensaje de error para el caso de que no se introduzca un array de numpy
         if type(imagen) != type(np.array([])):
             raise Exception('Esto no es un array de numpy')
         
+        
+        
+        #copia la imagen 
         img = imagen.copy()
+        
         #obtiene el tamaño original de la imagen para emplearlo más tarde
         shaped= img.shape
         
@@ -71,19 +82,20 @@ class asciiConverter():
         
         #bucles anidados que van a recorrer la imagen
         
-        for fila in range(img.shape[1]):
+        for fila in img:
             #lista de los resultados de cada columna
             preResult = []
             
-            for columna in range((img.shape[0])):
+            for columna in fila:
                 #saca los valores RGB de la imagen
-                colorRGB = img[fila][columna]
+          
+                colorRGB = columna
                 
                 #añade el color de cada pixel a su correspondiente columna
                 preResult.append(self.colors[colorRGB[0]][colorRGB[1]][colorRGB[2]])
             #añade la fila a la lista
             result.append(preResult)
-        
+      
         return result
         
         
@@ -108,7 +120,7 @@ class asciiConverter():
         #calcula las nuevas proporciones de la imagen : (largo_original*((ancho*100)/ancho_original))/100
         nuevo_ancho = ancho
         porcentaje = (ancho*100)/shape[1]
-        nuevo_alto = int((shape[0]*porcentaje)/100)
+        nuevo_alto = int(((shape[0]*porcentaje)/100) -1)
         
         #realiza el reescalado de la imagen con las proporciones calculadas
         img_resized = cv.resize(img,(nuevo_ancho,nuevo_alto))
@@ -121,21 +133,28 @@ class asciiConverter():
             colores =self.PhotoToColor(self.binarizarImagen(img_resized))
         
         #array de números que contiene la 
-        chars = (np.round((img_grayScale/(255/len(caracteres)))-1))
+        chars = (np.round((img_grayScale/(255/(len(caracteres)-1)))))
       
         #string que contendrá el resultado
         result = ''
         
         #bucle concatenado que lee y crea el string final
-        for fila in range(chars.shape[1]):
-            
-            for columna in range(chars.shape[0]):
+        filax = 0
+        for fila in chars:
+            columnax = 0
+            for columna in fila:
+                
                 #le añade color en caso de que se desee
                 if color:
-                    result = result + colores[fila][columna]
+                  
+                    result = result + colores[filax][columnax]
                     
                 #esto añade el carácter correspondiente a cada píxel   
-                result = result + caracteres[int(chars[fila][columna])-1] + self.reset
+              
+                result = result + caracteres[int(chars[filax][columnax])] + self.reset
+                
+                columnax += 1
+            filax += 1    
             result += '\n'
        
         
